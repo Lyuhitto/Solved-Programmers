@@ -2,23 +2,13 @@ import re
 
 
 def solution(dartResult):
-    score = re.findall(r'\d+[SDT][*#]?', dartResult)
-    score_arr = []
+    answer = []
+    bonus = {'S': 1, 'D': 2, 'T': 3}
+    option = {'': 1, '*': 2, '#': -1}
+    score = re.findall(r'(\d+)([SDT])([*#]?)', dartResult)
+    print(score)
     for idx, val in enumerate(score):
-        num = int(re.findall(r'\d+', val)[-1])
-        if 'S' in val:
-            score_arr.append(num)
-        elif 'D' in val:
-            score_arr.append(num**2)
-        elif 'T' in val:
-            score_arr.append(num**3)
-        if '*' in val:
-            if idx == 0:
-                score_arr[idx] *= 2
-            else:
-                score_arr[idx] *= 2
-                score_arr[idx - 1] *= 2
-        if '#' in val:
-            score_arr[idx] *= -1
-    answer = sum(score_arr)
-    return answer
+        if val[2] == '*' and idx > 0:
+            answer[idx - 1] *= 2
+        answer.append(int(val[0]) ** bonus[val[1]] * option[val[2]])
+    return sum(answer)
